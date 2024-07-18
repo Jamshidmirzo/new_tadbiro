@@ -2,6 +2,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:new_firebase/controllers/event_controller.dart';
+import 'package:new_firebase/controllers/user_controller.dart';
 import 'package:new_firebase/firebase_options.dart';
 import 'package:new_firebase/services/localization_service.dart';
 import 'package:new_firebase/views/screens/splash_screen.dart';
@@ -47,6 +48,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => EventController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserController(),
         ),
       ],
       child: AdaptiveTheme(

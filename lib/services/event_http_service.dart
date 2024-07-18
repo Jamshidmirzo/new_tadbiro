@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:new_firebase/models/event.dart';
@@ -55,6 +54,40 @@ class EventHttpService {
     } catch (e) {
       print('Error uploading image: $e');
       return '';
+    }
+  }
+
+  Future<void> incrementEventMembers(String eventId) async {
+    try {
+      DocumentReference eventRef = _firebase.collection('events').doc(eventId);
+      await _firebase.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(eventRef);
+        if (!snapshot.exists) {
+          throw Exception('Event does not exist');
+        }
+        int newMembersCount = (snapshot['members'] as int) + 1;
+        transaction.update(eventRef, {'members': newMembersCount});
+      });
+    } catch (e) {
+      print('Error incrementing event members: $e');
+    }
+  }
+
+  Future<void> decrementEventMembers(String eventId) async {
+    try {
+      DocumentReference eventRef = _firebase.collection('events').doc(eventId);
+      await _firebase.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(eventRef);
+        if (!snapshot.exists) {
+          throw Exception("Event does not exist");
+        }
+        int currentMembers = snapshot.get('members') ?? 0;
+        if (currentMembers > 0) {
+          transaction.update(eventRef, {'members': currentMembers - 1});
+        }
+      });
+    } catch (e) {
+      print('Error decrementing members: $e');
     }
   }
 }

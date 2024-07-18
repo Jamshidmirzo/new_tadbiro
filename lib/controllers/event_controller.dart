@@ -9,7 +9,9 @@ class EventController extends ChangeNotifier {
   List<Event> _userEvents = [];
   List<Event> _nearestEvents = [];
   bool _isLoading = false;
+  List<Event> _allEvents = [];
 
+  List<Event> get allEvents => _allEvents;
   List<Event> get events => _events;
   List<Event> get userEvents => _userEvents;
   List<Event> get nearestEvents => _nearestEvents;
@@ -71,4 +73,22 @@ class EventController extends ChangeNotifier {
       print("Error adding event: $e");
     }
   }
+
+  List<Event> searchEventsByName(String query) {
+    query = query.toLowerCase().trim();
+
+    return _allEvents
+        .where((event) => event.name.toLowerCase().contains(query))
+        .toList();
+  }
+
+  List<Event> searchEventsByLocation(String query) {
+    query = query.toLowerCase().trim();
+    return _allEvents
+        .where(
+          (event) => event.locationName.toLowerCase().contains(query),
+        )
+        .toList();
+  }
+  
 }

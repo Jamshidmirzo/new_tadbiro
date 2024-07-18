@@ -13,6 +13,7 @@ class TadbirItem extends StatefulWidget {
 }
 
 class _TadbirItemState extends State<TadbirItem> {
+  bool isLiked = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,7 +38,7 @@ class _TadbirItemState extends State<TadbirItem> {
                   width: 70,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: Colors.blueAccent,
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: Column(
@@ -58,11 +59,15 @@ class _TadbirItemState extends State<TadbirItem> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
-                icon: const Icon(
+                onPressed: () {
+                  setState(() {
+                    isLiked = !isLiked;
+                  });
+                },
+                icon: Icon(
                   CupertinoIcons.heart_circle_fill,
                   size: 40,
-                  color: Colors.white,
+                  color: isLiked ? Colors.red : Colors.white,
                 ),
               ),
             ],

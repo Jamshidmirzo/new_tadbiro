@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:new_firebase/models/event.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:new_firebase/services/event_http_service.dart';
+import 'package:new_firebase/views/widgets/moddalsheet.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventInfoScreen extends StatefulWidget {
   final Event event;
@@ -17,6 +20,32 @@ class _EventInfoScreenState extends State<EventInfoScreen> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+
+  Future<void> _incrementMembers(int number) async {
+    try {
+      await EventHttpService().incrementEventMembers(widget.event.id);
+      setState(() {
+        widget.event.members += number;
+      });
+    } catch (e) {
+      print('Error incrementing members: $e');
+    }
+  }
+
+  void _showModifyMembersDialog() async {
+    final responce = await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Moddalsheet(
+          event: widget.event,
+        );
+      },
+    );
+    if (responce != null) {
+      int number = responce['number'];
+      _incrementMembers(number);
+    }
   }
 
   @override
@@ -101,6 +130,12 @@ class _EventInfoScreenState extends State<EventInfoScreen> {
                 widget.event.description,
                 style: const TextStyle(fontSize: 23),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              Text('Members: ${widget.event.members}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20)),
               const SizedBox(height: 20),
               const Text(
                 'Event Location',
@@ -142,7 +177,7 @@ class _EventInfoScreenState extends State<EventInfoScreen> {
                 height: 20,
               ),
               ZoomTapAnimation(
-                onTap: () {},
+                onTap: _showModifyMembersDialog,
                 child: Container(
                   width: double.infinity,
                   height: 50,
@@ -152,7 +187,7 @@ class _EventInfoScreenState extends State<EventInfoScreen> {
                     color: Colors.orange.shade300,
                   ),
                   child: const Text(
-                    "Ishtork etish",
+                    "Join Event",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,

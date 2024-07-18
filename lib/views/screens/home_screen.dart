@@ -1,14 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:new_firebase/controllers/event_controller.dart';
+import 'package:new_firebase/models/event.dart';
 import 'package:new_firebase/views/screens/notification_screen.dart';
 import 'package:new_firebase/views/widgets/drawer_widget.dart';
 import 'package:new_firebase/views/widgets/evets_item.dart';
 import 'package:new_firebase/views/widgets/tadbir_item.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +60,12 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value.toLowerCase().trim();
+                    });
+                  },
                   decoration: InputDecoration(
                     labelText: 'Tadbirlarni izlash',
                     prefixIcon: const Icon(Icons.search),
@@ -72,19 +93,21 @@ class HomeScreen extends StatelessWidget {
                               position: position,
                               items: const [
                                 PopupMenuItem(
-                                  child: Text("Option 1"),
+                                  child: Text("Search by Event Name"),
                                   value: 1,
                                 ),
                                 PopupMenuItem(
-                                  child: Text("Option 2"),
+                                  child: Text("Search by Location"),
                                   value: 2,
                                 ),
                               ],
                             ).then((value) {
                               if (value == 1) {
-
+                                _searchByName();
+                                _searchController.clear();
                               } else if (value == 2) {
-
+                                _searchByLocation();
+                                _searchController.clear();
                               }
                             });
                           },
@@ -133,21 +156,47 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Builder(builder: (context) {
-            return Expanded(
-              child: eventController.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      itemCount: eventController.events.length,
-                      itemBuilder: (context, index) {
-                        final event = eventController.events[index];
-                        return EvetsItem(event: event);
-                      },
-                    ),
-            );
-          }),
+          Builder(
+            builder: (context) {
+              final List<Event> filteredEvents = _searchQuery.isEmpty
+                  ? eventController.events
+                  : eventController.events
+                      .where((event) =>
+                          event.name.toLowerCase().contains(_searchQuery) ||
+                          event.locationName
+                              .toLowerCase()
+                              .contains(_searchQuery))
+                      .toList();
+
+              return Expanded(
+                child: eventController.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemCount: filteredEvents.length,
+                        itemBuilder: (context, index) {
+                          final event = filteredEvents[index];
+                          return EvetsItem(event: event);
+                        },
+                      ),
+              );
+            },
+          ),
         ],
       ),
     );
+  }
+
+  void _searchByName() {
+    setState(() {
+      _searchQuery = _searchController.text.toLowerCase().trim();
+    });
+    EventController().searchEventsByName(_searchQuery);
+  }
+
+  void _searchByLocation() {
+    setState(() {
+      EventController().searchEventsByLocation(_searchQuery);
+      _searchQuery = _searchController.text.toLowerCase().trim();
+    });
   }
 }

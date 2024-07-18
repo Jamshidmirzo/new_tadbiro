@@ -9,6 +9,7 @@ class Event {
   final String description;
   final String imageUrl;
   final String locationName;
+   int members; // New field
 
   Event({
     required this.locationName,
@@ -19,6 +20,7 @@ class Event {
     required this.geoPoint,
     required this.description,
     required this.imageUrl,
+    this.members = 0, // Default value
   });
 
   factory Event.fromQuerySnapshot(QueryDocumentSnapshot<Object?> snapshot) {
@@ -31,6 +33,7 @@ class Event {
       geoPoint: snapshot['geo-point'] as GeoPoint,
       description: snapshot['description'] as String,
       imageUrl: snapshot['image-url'] as String,
+      members: snapshot['members'] ?? 0, 
     );
   }
 
@@ -43,6 +46,7 @@ class Event {
       'geo-point': geoPoint,
       'description': description,
       'image-url': imageUrl,
+      'members': members, // Add members to JSON
     };
   }
 }

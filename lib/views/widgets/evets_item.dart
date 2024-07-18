@@ -5,10 +5,17 @@ import 'package:new_firebase/models/event.dart';
 import 'package:new_firebase/views/screens/eventInfo_screen.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
-class EvetsItem extends StatelessWidget {
+class EvetsItem extends StatefulWidget {
   final Event event;
 
-  const EvetsItem({required this.event});
+  EvetsItem({required this.event});
+
+  @override
+  State<EvetsItem> createState() => _EvetsItemState();
+}
+
+class _EvetsItemState extends State<EvetsItem> {
+  bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class EvetsItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return EventInfoScreen(event: event);
+              return EventInfoScreen(event: widget.event);
             },
           ),
         );
@@ -38,7 +45,7 @@ class EvetsItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage(event.imageUrl),
+                    image: NetworkImage(widget.event.imageUrl),
                   ),
                 ),
               ),
@@ -50,14 +57,14 @@ class EvetsItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        event.name,
+                        widget.event.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
                       ),
                       Text(
-                        DateFormat.yMMMd().format(event.time.toDate()),
+                        DateFormat.yMMMd().format(widget.event.time.toDate()),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -67,7 +74,7 @@ class EvetsItem extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              event.locationName,
+                              widget.event.locationName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -77,11 +84,14 @@ class EvetsItem extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
+                            onPressed: () {
+                              isLiked = !isLiked;
+                              setState(() {});
+                            },
+                            icon: Icon(
                               CupertinoIcons.heart_circle_fill,
                               size: 30,
-                              color: Colors.red,
+                              color: isLiked ? Colors.red : Colors.white,
                             ),
                           ),
                         ],

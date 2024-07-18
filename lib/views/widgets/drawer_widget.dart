@@ -1,14 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:new_firebase/controllers/user_controller.dart';
+import 'package:new_firebase/models/user.dart';
 import 'package:new_firebase/services/auth_firebase_service.dart';
 import 'package:new_firebase/views/screens/evets_screen.dart';
 import 'package:new_firebase/views/screens/home_screen.dart';
+import 'package:new_firebase/views/screens/profile_screen.dart';
 import 'package:new_firebase/views/screens/signinpage.dart';
+import 'package:provider/provider.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class DrawerWidget extends StatefulWidget {
-  const DrawerWidget({super.key});
+  const DrawerWidget({Key? key}) : super(key: key);
 
   @override
   State<DrawerWidget> createState() => _DrawerWidgetState();
@@ -17,10 +21,12 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   final firebaseservice = AuthFirebaseService();
   bool _isDarkMode = false;
+  Users? _currentUser;
 
   @override
   void initState() {
     super.initState();
+    _fetchCurrentUser(context);
     AdaptiveTheme.getThemeMode().then((themeMode) {
       setState(() {
         _isDarkMode = (themeMode == AdaptiveThemeMode.dark);
@@ -28,12 +34,27 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     });
   }
 
+  void _fetchCurrentUser(BuildContext context) async {
+    final userController = context.read<UserController>();
+
+    try {
+      Users user = await userController.getUsersSortedByUid();
+
+      setState(() {
+        _currentUser = user;
+      });
+    } catch (e) {
+      print('Failed to fetch user: $e');
+      setState(() {
+        _currentUser = null;
+      });
+    }
+  }
+
   void _toggleTheme(bool value) {
-    setState(
-      () {
-        _isDarkMode = value;
-      },
-    );
+    setState(() {
+      _isDarkMode = value;
+    });
     if (_isDarkMode) {
       AdaptiveTheme.of(context).setDark();
     } else {
@@ -47,20 +68,34 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: Color.fromARGB(255, 238, 173, 76)),
-            accountName: Text('John Doe'),
-            accountEmail: Text('john.doe@example.com'),
-            currentAccountPicture: CircleAvatar(),
+          UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 238, 173, 76),
+            ),
+            accountName: _currentUser != null
+                ? Text(
+                    _currentUser!.firstName,
+                    style: const TextStyle(color: Colors.black, fontSize: 20),
+                  )
+                : const Text('Nou name'),
+            accountEmail: _currentUser != null
+                ? Text(_currentUser!.email)
+                : const Text(''),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: _currentUser != null
+                  ? NetworkImage(_currentUser!.imageUrl)
+                  : null,
+              child: _currentUser == null || _currentUser!.imageUrl.isEmpty
+                  ? const Icon(Icons.person)
+                  : null,
+            ),
           ),
           ZoomTapAnimation(
             onTap: () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
-                    return const HomeScreen();
-                  },
+                  builder: (context) => const HomeScreen(),
                 ),
               );
             },
@@ -69,19 +104,26 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               title: Text('Home'),
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Profile'),
+          ZoomTapAnimation(
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(),
+                ),
+              );
             },
+            child: const ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+            ),
           ),
           ZoomTapAnimation(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EvetsScreen(),
+                  builder: (context) => const EvetsScreen(),
                 ),
               );
             },
@@ -103,9 +145,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
-                    return Signinpage();
-                  },
+                  builder: (context) => const Signinpage(),
                 ),
               );
             },
