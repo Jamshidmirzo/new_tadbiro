@@ -29,7 +29,7 @@ class UserHttpService {
     try {
       var snapshot = await _firebase
           .collection('users')
-          .orderBy('email')
+          .orderBy('')
           .get();
           
       if (snapshot.docs.isNotEmpty) {

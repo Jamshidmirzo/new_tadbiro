@@ -2,8 +2,8 @@
     "home": "Home Screen",
     "ti": "Search Event",
     "sn": "Search by Name",
-    "sg": "Search by Address",
-    "y7": "Within the next 7 days",
+    "sg": "Search by Location",
+    "y7": "Next 7 Days",
     "bt": "All Events",
     "profile": "Profile Screen",
     "events": "Events",
@@ -12,8 +12,12 @@
     "entername": "Enter your name",
     "enterurl": "Enter image URL",
     "savep": "Save Profile",
-    "enternameerror": "Enter a valid name",
-    "enterurlerror": "Enter a valid URL",
-    "event": "Information about Location",
-    "select_language":"Select language"
+    "enternameerror": "Please enter a valid name",
+    "enterurlerror": "Please enter a valid URL",
+    "event": "Event Details",
+    "select_language": "Select Language",
+    "addevent": "Add Event",
+    "ne": "Event Name",
+    "nd": "Date",
+    "de": "Event Description"
 }

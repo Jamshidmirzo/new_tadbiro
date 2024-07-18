@@ -15,5 +15,9 @@
     "enternameerror":"Ism tog`ri kirg`izng",
     "enterurlerror":"URL tog`ri kirg`izng",
     "event":"Location haqida ma`lumot",
-    "select_language":"Til tanlash"
+    "select_language":"Til tanlash",
+    "addevent":"Tadbirlar qo`shish",
+    "ne":"Tadbir nomi",
+    "nd":"Sana",
+    "de":"Tadbir tasvifi"
 }

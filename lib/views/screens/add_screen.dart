@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,8 +25,8 @@ class _AddScreenState extends State<AddScreen> {
   File? imageFile;
   LatLng? selectedLocation;
   GoogleMapController? mapController;
-  String? locationName; // Added locationName field
-  bool _isLoading = false; // Add loading state
+  String? locationName; 
+  bool _isLoading = false; 
 
   void openGallery() async {
     final imagePicker = ImagePicker();
@@ -140,7 +141,7 @@ class _AddScreenState extends State<AddScreen> {
             : const Icon(Icons.add),
       ),
       appBar: AppBar(
-        title: const Text("Add Event"),
+        title:  Text(context.tr('addevent')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -153,7 +154,7 @@ class _AddScreenState extends State<AddScreen> {
                 TextFormField(
                   controller: nameController,
                   decoration: InputDecoration(
-                    labelText: 'Name of Event',
+                    labelText:context.tr('ne'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -169,7 +170,7 @@ class _AddScreenState extends State<AddScreen> {
                 TextFormField(
                   controller: dateController,
                   decoration: InputDecoration(
-                    labelText: 'Date',
+                    labelText: context.tr('nd'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -183,7 +184,7 @@ class _AddScreenState extends State<AddScreen> {
                   maxLines: 5,
                   decoration: InputDecoration(
                     suffixIcon: const Icon(Icons.timelapse_sharp, size: 40),
-                    labelText: 'Description of Event',
+                    labelText: context.tr('de'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -247,9 +248,9 @@ class _AddScreenState extends State<AddScreen> {
                     ),
                   ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Select Location',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                Text(
+                  context.tr('event'),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 const SizedBox(height: 20),
                 Container(
