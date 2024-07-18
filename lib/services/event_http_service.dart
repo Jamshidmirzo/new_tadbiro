@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:new_firebase/models/event.dart';
 
@@ -88,6 +89,24 @@ class EventHttpService {
       });
     } catch (e) {
       print('Error decrementing members: $e');
+    }
+  }
+
+  Future<List<Event>> fetchUserEvents() async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      final querySnapshot = await _firebase
+          .collection('events')
+          .where('creator_id', arrayContains: userId)
+          .get();
+
+      final userEvents = querySnapshot.docs
+          .map((doc) => Event.fromQuerySnapshot(doc))
+          .toList();
+      return userEvents;
+    } catch (e) {
+      print('Error fetching user events: $e');
+      return [];
     }
   }
 }

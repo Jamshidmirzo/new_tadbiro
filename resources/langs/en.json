@@ -1,0 +1,19 @@
+{
+    "home": "Home Screen",
+    "ti": "Search Event",
+    "sn": "Search by Name",
+    "sg": "Search by Address",
+    "y7": "Within the next 7 days",
+    "bt": "All Events",
+    "profile": "Profile Screen",
+    "events": "Events",
+    "qm": "Toggle Status",
+    "logout": "Logout",
+    "entername": "Enter your name",
+    "enterurl": "Enter image URL",
+    "savep": "Save Profile",
+    "enternameerror": "Enter a valid name",
+    "enterurlerror": "Enter a valid URL",
+    "event": "Information about Location",
+    "select_language":"Select language"
+}

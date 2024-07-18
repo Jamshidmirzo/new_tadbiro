@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:new_firebase/controllers/event_controller.dart';
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: const DrawerWidget(),
       appBar: AppBar(
         backgroundColor: Colors.orange.shade300,
-        title: const Text("Home"),
+        title: Text(context.tr('home')),
         actions: [
           IconButton(
             onPressed: () {
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
                   },
                   decoration: InputDecoration(
-                    labelText: 'Tadbirlarni izlash',
+                    labelText: context.tr('ti'),
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: Builder(
                       builder: (context) {
@@ -91,13 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             showMenu(
                               context: context,
                               position: position,
-                              items: const [
+                              items: [
                                 PopupMenuItem(
-                                  child: Text("Search by Event Name"),
+                                  child: Text(context.tr('sn')),
                                   value: 1,
                                 ),
                                 PopupMenuItem(
-                                  child: Text("Search by Location"),
+                                  child: Text(context.tr('sg')),
                                   value: 2,
                                 ),
                               ],
@@ -121,8 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Yaqin 7 kun ichida',
+                Text(
+                  context.tr('y7'),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const SizedBox(height: 20),
@@ -145,11 +146,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(10.0),
             child: Text(
-              'Barcha tadbirlar',
-              style: TextStyle(
+              context.tr('bt'),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
@@ -167,7 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               .toLowerCase()
                               .contains(_searchQuery))
                       .toList();
-
               return Expanded(
                 child: eventController.isLoading
                     ? const Center(child: CircularProgressIndicator())

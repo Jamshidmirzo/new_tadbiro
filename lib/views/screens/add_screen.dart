@@ -25,6 +25,7 @@ class _AddScreenState extends State<AddScreen> {
   LatLng? selectedLocation;
   GoogleMapController? mapController;
   String? locationName; // Added locationName field
+  bool _isLoading = false; // Add loading state
 
   void openGallery() async {
     final imagePicker = ImagePicker();
@@ -98,7 +99,9 @@ class _AddScreenState extends State<AddScreen> {
   void save() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      print(locationName);
+      setState(() {
+        _isLoading = true;
+      });
       final eventController =
           Provider.of<EventController>(context, listen: false);
 
@@ -117,6 +120,9 @@ class _AddScreenState extends State<AddScreen> {
       );
 
       await eventController.addEvent(newEvent, imageFile!);
+      setState(() {
+        _isLoading = false;
+      });
       Navigator.pop(context);
     }
   }
@@ -127,7 +133,11 @@ class _AddScreenState extends State<AddScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: save,
-        child: const Icon(Icons.add),
+        child: _isLoading
+            ? const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+            : const Icon(Icons.add),
       ),
       appBar: AppBar(
         title: const Text("Add Event"),

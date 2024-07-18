@@ -52,6 +52,7 @@ dependencies:
   google_places_flutter: ^2.0.9
   geocoding: ^3.0.0
   adaptive_theme: ^3.6.0
+  easy_localization: ^3.0.7
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +80,7 @@ flutter:
   assets:
     - assets/images/
     - assets/lotties/
+    - resources/langs/
    
 
   # An image asset can refer to one or more resolution-specific "variants", see

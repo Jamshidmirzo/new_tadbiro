@@ -17,7 +17,8 @@ class EventInfoScreen extends StatefulWidget {
 
 class _EventInfoScreenState extends State<EventInfoScreen> {
   late GoogleMapController mapController;
-
+  int number = 0;
+  bool isJoinde = false;
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -27,6 +28,17 @@ class _EventInfoScreenState extends State<EventInfoScreen> {
       await EventHttpService().incrementEventMembers(widget.event.id);
       setState(() {
         widget.event.members += number;
+      });
+    } catch (e) {
+      print('Error incrementing members: $e');
+    }
+  }
+
+  Future<void> _decrementMembers(int number) async {
+    try {
+      await EventHttpService().decrementEventMembers(widget.event.id);
+      setState(() {
+        widget.event.members -= number;
       });
     } catch (e) {
       print('Error incrementing members: $e');
@@ -43,8 +55,10 @@ class _EventInfoScreenState extends State<EventInfoScreen> {
       },
     );
     if (responce != null) {
-      int number = responce['number'];
+      number = responce['number'];
       _incrementMembers(number);
+      isJoinde = !isJoinde;
+      setState(() {});
     }
   }
 
@@ -130,7 +144,7 @@ class _EventInfoScreenState extends State<EventInfoScreen> {
                 widget.event.description,
                 style: const TextStyle(fontSize: 23),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text('Members: ${widget.event.members}',
@@ -176,25 +190,49 @@ class _EventInfoScreenState extends State<EventInfoScreen> {
               const SizedBox(
                 height: 20,
               ),
-              ZoomTapAnimation(
-                onTap: _showModifyMembersDialog,
-                child: Container(
-                  width: double.infinity,
-                  height: 50,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.orange.shade300,
-                  ),
-                  child: const Text(
-                    "Join Event",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+              isJoinde
+                  ? ZoomTapAnimation(
+                      onTap: () {
+                        _decrementMembers(number);
+                        isJoinde = !isJoinde;
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 50,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red.shade300,
+                        ),
+                        child: const Text(
+                          "Otmena",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    )
+                  : ZoomTapAnimation(
+                      onTap: _showModifyMembersDialog,
+                      child: Container(
+                        width: double.infinity,
+                        height: 50,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.orange.shade300,
+                        ),
+                        child: const Text(
+                          "Join Event",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),

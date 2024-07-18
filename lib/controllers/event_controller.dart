@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_firebase/models/event.dart';
 import 'package:new_firebase/services/event_http_service.dart';
@@ -90,5 +91,8 @@ class EventController extends ChangeNotifier {
         )
         .toList();
   }
-  
+
+  Future<List<Event>> fetchUserEvents() async {
+    return eventService.fetchUserEvents();
+  }
 }

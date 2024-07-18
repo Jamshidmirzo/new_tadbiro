@@ -1,0 +1,19 @@
+{
+    "home":"Asosiy oyna",
+    "ti":"Tadbirni Izlash",
+    "sn":"Nom boyicha qidirish",
+    "sg":"Manzil boyicha qidirish",
+    "y7":"Yaqin 7 kun ichida",
+    "bt":"Barcha Tadbrilar",
+    "profile":"profile oynasi",
+    "events":"Tadbirlar",
+    "qm":"Holatni almashtrish",
+    "logout":"Chiqib ketish",
+    "entername":"ismingizni kirg`izing",
+    "enterurl":"Rasm url kirg`zing",
+    "savep":"Profilni saqlash",
+    "enternameerror":"Ism tog`ri kirg`izng",
+    "enterurlerror":"URL tog`ri kirg`izng",
+    "event":"Location haqida ma`lumot",
+    "select_language":"Til tanlash"
+}

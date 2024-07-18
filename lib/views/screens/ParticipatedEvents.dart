@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:new_firebase/controllers/event_controller.dart';
@@ -12,25 +14,25 @@ class ParticipatedEvents extends StatelessWidget {
     final eventController = Provider.of<EventController>(context);
 
     return Scaffold(
-      body: eventController.userEvents.isEmpty
-          ? const Center(
-              child: Text('No events participated in yet.'),
-            )
-          : ListView.builder(
-              itemCount: eventController.userEvents.length,
+      body: FutureBuilder<List<Event>>(
+        future: eventController.fetchUserEvents(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error fetching events.'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No events participated in yet.'));
+          } else {
+            final userEvents = snapshot.data!;
+            return ListView.builder(
+              itemCount: userEvents.length,
               itemBuilder: (context, index) {
-                final event = eventController.userEvents[index];
+                final event = userEvents[index];
                 return ListTile(
-                  title: Text(
-                    event.name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
+                  title: Text(event.name),
                   subtitle: Text(event.locationName),
-                  trailing: Text(
-                    'Members: ${event.members}',
-                    
-                  ),
+                  trailing: Text('Members: ${event.members}'),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -41,7 +43,10 @@ class ParticipatedEvents extends StatelessWidget {
                   },
                 );
               },
-            ),
+            );
+          }
+        },
+      ),
     );
   }
 }

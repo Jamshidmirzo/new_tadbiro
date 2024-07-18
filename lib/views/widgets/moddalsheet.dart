@@ -53,7 +53,7 @@ class _ModdalsheetState extends State<Moddalsheet> {
                       ),
                       alignment: Alignment.center,
                       child: const Text(
-                        "Home pagega",
+                        "Home pagegs",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,

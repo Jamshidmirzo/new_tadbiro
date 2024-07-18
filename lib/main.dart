@@ -1,4 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:new_firebase/controllers/event_controller.dart';
@@ -12,31 +13,38 @@ import 'package:provider/provider.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  // Initialize Easy Localization
+  await EasyLocalization.ensureInitialized();
 
+  // Request necessary permissions
   await requestPermissions();
 
-
+  // Initialize Location Service
   await LocationService.init();
 
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const[
+        Locale('en'),
+        Locale('ru'),
+        Locale('uz')
+      ],
+      path: 'resources/langs/',
+      fallbackLocale: const Locale('en'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 Future<void> requestPermissions() async {
-  final cameraPermission = await Permission.camera.status;
-  final galleryPermission = await Permission.photos.status;
-  final locationPermission = await Permission.location.status;
-
-  if (cameraPermission != PermissionStatus.granted) {
-    await Permission.camera.request();
-  }
-  if (locationPermission != PermissionStatus.granted) {
-    await Permission.location.request();
-  }
-  if (galleryPermission != PermissionStatus.granted) {
-    await Permission.photos.request();
-  }
+  await [
+    Permission.camera,
+    Permission.photos,
+    Permission.location,
+  ].request();
 }
 
 class MyApp extends StatelessWidget {
@@ -62,6 +70,9 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,
+            locale: context.locale,
+            supportedLocales: context.supportedLocales,
+            localizationsDelegates: context.localizationDelegates,
             home: const SplashScreen(),
           );
         },

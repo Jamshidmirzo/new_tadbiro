@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_firebase/controllers/user_controller.dart';
 import 'package:new_firebase/models/user.dart';
 import 'package:new_firebase/services/auth_firebase_service.dart';
@@ -39,7 +39,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
     try {
       Users user = await userController.getUsersSortedByUid();
-
       setState(() {
         _currentUser = user;
       });
@@ -65,8 +64,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
           UserAccountsDrawerHeader(
             decoration: const BoxDecoration(
@@ -99,9 +97,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
               );
             },
-            child: const ListTile(
+            child: ListTile(
               leading: Icon(Icons.home),
-              title: Text('Home'),
+              title: Text(tr('home')),
             ),
           ),
           ZoomTapAnimation(
@@ -113,9 +111,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
               );
             },
-            child: const ListTile(
+            child: ListTile(
               leading: Icon(Icons.person),
-              title: Text('Profile'),
+              title: Text(tr('profile')),
             ),
           ),
           ZoomTapAnimation(
@@ -127,16 +125,58 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
               );
             },
-            child: const ListTile(
+            child: ListTile(
               leading: Icon(Icons.event),
-              title: Text('Events'),
+              title: Text(tr('events')),
             ),
           ),
           SwitchListTile(
-            title: const Text('Dark Mode'),
+            title: Text(tr('qm')),
             secondary: const Icon(Icons.settings),
             value: _isDarkMode,
             onChanged: _toggleTheme,
+          ),
+          ZoomTapAnimation(
+            onTap: () async {
+              Locale? selectedLocale = await showDialog<Locale>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(tr('select_language')),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: Text('English'),
+                          onTap: () {
+                            Navigator.pop(context, Locale('en'));
+                          },
+                        ),
+                        ListTile(
+                          title: Text('Русский'),
+                          onTap: () {
+                            Navigator.pop(context, Locale('ru'));
+                          },
+                        ),
+                        ListTile(
+                          title: Text('Oʻzbek'),
+                          onTap: () {
+                            Navigator.pop(context, Locale('uz'));
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+              if (selectedLocale != null) {
+                context.setLocale(selectedLocale);
+              }
+            },
+            child: ListTile(
+              leading: Icon(Icons.language),
+              title: Text(tr('select_language')),
+            ),
           ),
           const Spacer(),
           ZoomTapAnimation(
@@ -149,9 +189,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
               );
             },
-            child: const ListTile(
+            child: ListTile(
               leading: Icon(Icons.logout),
-              title: Text('Logout'),
+              title: Text(tr('logout')),
             ),
           ),
         ],

@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_firebase/controllers/user_controller.dart';
@@ -21,10 +24,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void saveProfile() {
     if (formKey.currentState!.validate()) {
       final Users user = Users(
-        id: UniqueKey().toString(), 
-        uid: FirebaseAuth.instance.currentUser!.uid, 
+        id: UniqueKey().toString(),
+        uid: FirebaseAuth.instance.currentUser!.uid,
         firstName: _nameController.text,
-        email:FirebaseAuth.instance.currentUser!.email!, 
+        email: FirebaseAuth.instance.currentUser!.email!,
         imageUrl: _photoController.text,
       );
       final userHttpService = context.read<UserController>();
@@ -33,7 +36,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SnackBar(content: Text('Profile saved')),
         );
       }).catchError((error) {
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to save profile: $error')),
         );
@@ -57,14 +59,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 controller: _nameController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return context.tr('enternameerror');
                   }
                   return null;
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Enter your name',
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(
+                decoration: InputDecoration(
+                  labelText: context.tr('entername'),
+                  prefixIcon: const Icon(Icons.person),
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                 ),
@@ -74,12 +76,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 controller: _photoController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter image URL';
+                    return context.tr('enterurlerror');
                   }
                   return null;
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Enter photo URL',
+                decoration: InputDecoration(
+                  labelText: context.tr('enterurl'),
                   prefixIcon: Icon(Icons.photo),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -89,7 +91,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: saveProfile,
-                child: const Text('Save Profile'),
+                child: Text(
+                  context.tr('savep'),
+                ),
               ),
             ],
           ),
