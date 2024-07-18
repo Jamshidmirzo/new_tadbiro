@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "815958579571",
+    "project_id": "examproject-ae98a",
+    "storage_bucket": "examproject-ae98a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815958579571:android:34c1142270d91166314d06",
+        "android_client_info": {
+          "package_name": "com.example.new_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiEM6uH0nclVbgmAyTdOrT00ZaVEGCnHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815958579571:android:e19fc5afa7a80fc6314d06",
+        "android_client_info": {
+          "package_name": "com.example.new_tadbiro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiEM6uH0nclVbgmAyTdOrT00ZaVEGCnHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815958579571:android:1919d7513baca4b4314d06",
+        "android_client_info": {
+          "package_name": "com.example.tadbiro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiEM6uH0nclVbgmAyTdOrT00ZaVEGCnHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
